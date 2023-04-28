@@ -10,16 +10,16 @@ class EstructuraTerritorial extends Model{
 }
 EstructuraTerritorial.init(
 {
-    id: {
-        autoIncrement: true,
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        primaryKey: true
-    },
-    nombre: {
-        type: DataTypes.STRING,
-        allowNull: false
-    }
+  id_territorio: {
+    autoIncrement: true,
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    primaryKey: true
+  },
+  nombre_territorio: {
+    type: DataTypes.STRING(50),
+    allowNull: false
+  }
 },
 {
     sequelize: DB.connection(),
@@ -31,7 +31,14 @@ EstructuraTerritorial.init(
         name: "estructura_territorial_pk",
         unique: true,
         fields: [
-          { name: "id" },
+          { name: "id_territorio" },
+        ]
+      },
+      {
+        name: "pk_estructura_territorial",
+        unique: true,
+        fields: [
+          { name: "id_territorio" },
         ]
       },
     ]
