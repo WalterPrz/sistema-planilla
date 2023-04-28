@@ -1,0 +1,39 @@
+{
+  "name": "api-bad",
+  "version": "1.0.0",
+  "description": "Api para sistemas planillas",
+  "main": "app.js",
+  "scripts": {
+    "start": "nodemon app.mjs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/WalterPrz/sistema-planilla.git"
+  },
+  "keywords": [
+    "Api",
+    "Planilla",
+    "sistema"
+  ],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/WalterPrz/sistema-planilla/issues"
+  },
+  "homepage": "https://github.com/WalterPrz/sistema-planilla#readme",
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.0",
+    "pg": "^8.10.0",
+    "pg-hstore": "^2.3.4",
+    "sequelize": "^6.31.0",
+    "sequelize-auto": "^0.8.8"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.22",
+    "sequelize-cli": "^6.6.0"
+  }
+}
