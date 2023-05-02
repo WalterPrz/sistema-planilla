@@ -78,9 +78,9 @@ export default class AuthController {
         {
           token_valid_after: moment().tz("America/El_Salvador").format(),
         },
-        { where: { id: req.usuario.id_usuario } }
+        { where: { id_usuario: req.usuario.id_usuario } }
       );
-      return res.status(HttpCode.HTTP_OK).send({});
+      return res.status(HttpCode.HTTP_OK).send({message:'Se ha cerrado la sesión.'});
     } catch (e) {
       throw e;
     }

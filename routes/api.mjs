@@ -8,6 +8,6 @@ import RegisterSchema from "../app/Schemas/RegisterSchema.mjs";
 const router = Router();
 router.post('/register',[validateToken, validateSchema(RegisterSchema)],Call(AuthController.register))
 router.post('/login',Call(AuthController.login))
-router.post('/logout',Call(AuthController.login))
+router.post('/logout',[validateToken],Call(AuthController.logout))
 router.use('/prueba',pruebaRouter)
 export default router;
