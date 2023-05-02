@@ -1,6 +1,6 @@
 import { Model, DataTypes } from "sequelize";
 import DB from "../DB/connection.mjs";
-import { Genero, Profesion, EstadoCivil,Municipio, PuestoTrabajoDependencia, DocumentoEmpleado } from "./index.mjs";
+import { Genero, Profesion, EstadoCivil,Municipio, PuestoTrabajoDependencia, DocumentoEmpleado, Usuario } from "./index.mjs";
 class Empleado extends Model {
   static associate() {
     this.belongsTo(Genero,{
@@ -20,6 +20,9 @@ class Empleado extends Model {
     })
     this.hasMany(DocumentoEmpleado,{
         foreignKey: 'id_empleado'
+    })
+    this.hasMany(Usuario,{
+      foreignKey: 'id_empleado'
     })
   }
 }
