@@ -13,6 +13,8 @@ import TipoDocumento from './TipoDocumento.mjs';
 import PuestoTrabajoDependencia from './PuestoTrabajoDependencia.mjs';
 import DocumentoEmpleado from './DocumentoEmpleado.mjs';
 import Empleado from './Empleado.mjs';
+import Usuario from './Usuario.mjs';
+import RefreshToken from './RefreshToken.mjs';
 EstructuraTerritorial.associate();
 Departamento.associate();
 Municipio.associate();
@@ -28,6 +30,8 @@ TipoDocumento.associate();
 PuestoTrabajoDependencia.associate();
 DocumentoEmpleado.associate();
 Empleado.associate();
+Usuario.associate();
+RefreshToken.associate();
 export {
     EstructuraTerritorial,
     Departamento,
@@ -44,4 +48,6 @@ export {
     PuestoTrabajoDependencia,
     DocumentoEmpleado,
     Empleado,
+    Usuario,
+    RefreshToken,
 }
