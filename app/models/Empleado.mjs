@@ -1,6 +1,6 @@
 import { Model, DataTypes } from "sequelize";
 import DB from "../DB/connection.mjs";
-import { Genero, Profesion, EstadoCivil,Municipio, PuestoTrabajoDependencia, DocumentoEmpleado, Usuario } from "./index.mjs";
+import { Usuario, Genero, Profesion, EstadoCivil,Municipio, PuestoTrabajoDependencia, DocumentoEmpleado } from "./index.mjs";
 class Empleado extends Model {
   static associate() {
     this.belongsTo(Genero,{
@@ -23,6 +23,12 @@ class Empleado extends Model {
     })
     this.hasMany(Usuario,{
       foreignKey: 'id_empleado'
+    })
+    this.hasMany(Empleado,{
+      foreignKey:'id_empleado_jefe'
+    })
+    this.belongsTo(Empleado,{
+      foreignKey: 'id_empleado_jefe'
     })
   }
 }
@@ -98,14 +104,30 @@ Empleado.init(
         type: DataTypes.DATEONLY,
         allowNull: false
       },
-      direccion_empleado: {
+      numero_casa_apto: {
         type: DataTypes.STRING(40),
         allowNull: false
       },
       salario: {
         type: DataTypes.DECIMAL,
         allowNull: false
-      }
+      },
+      id_empleado_jefe: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+      },
+      barrio_colonia_residencial : {
+        type: DataTypes.STRING(50),
+        allowNull: true
+      },
+      pasaje_senda : {
+        type: DataTypes.STRING(50),
+        allowNull: true
+      },
+      calle_avenida : {
+        type: DataTypes.STRING(100),
+        allowNull: false
+      },
   },
   {
     sequelize: DB.connection(),

@@ -27,7 +27,7 @@ const validateToken = async(req, res, next) => {
         message: "Token expirado",
       });
     }else{
-        throw e
+      next(e);
     }
   }
 }
