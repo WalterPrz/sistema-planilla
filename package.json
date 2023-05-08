@@ -4,7 +4,7 @@
   "description": "Api para sistemas planillas",
   "main": "app.js",
   "scripts": {
-    "start": "nodemon  app.mjs"
+    "start": "nodemon app.mjs"
   },
   "repository": {
     "type": "git",

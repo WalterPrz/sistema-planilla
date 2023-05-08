@@ -2,7 +2,6 @@ import BaseError from './BaseError.mjs';
 import HttpCode from '../configs/HttpCodes.mjs';
 export default class Handler {
     static handlerError(err, req, res, next) {
-        console.log("llega hasta acá")
         console.log("Ocurrio un error:", err)
         const debug = process.env.APP_DEBUG === 'true';
         if (err.name && err.name === 'JsonSchemaValidation') return res.status(HttpCode.HTTP_BAD_REQUEST).json(err.validations.body);    
