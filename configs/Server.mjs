@@ -12,6 +12,8 @@ class Server {
     this.port = process.env.PORT || 8000;
     this.host = process.env.HOST || 'localhost';
     this.middlewares();
+    this.routes();
+    this.exceptionConfig();
   }
   middlewares() {
     this.app.use(cors(corsConfig));

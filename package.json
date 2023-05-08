@@ -4,7 +4,7 @@
   "description": "Api para sistemas planillas",
   "main": "app.js",
   "scripts": {
-    "start": "nodemon app.mjs"
+    "start": "nodemon  app.mjs"
   },
   "repository": {
     "type": "git",
@@ -38,6 +38,10 @@
     "uuid": "^9.0.0"
   },
   "devDependencies": {
+    "@babel/cli": "^7.21.5",
+    "@babel/core": "^7.21.8",
+    "@babel/node": "^7.20.7",
+    "@babel/preset-env": "^7.21.5",
     "nodemon": "^2.0.22",
     "sequelize-cli": "^6.6.0"
   }
