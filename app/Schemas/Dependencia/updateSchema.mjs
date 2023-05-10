@@ -27,8 +27,7 @@ const verifyIsFirst = async (value, { req }) => {
 }
 const updateDependenciaSchema = {
     id_dependencia: {
-        isNumeric: {
-            options: { no_symbols: true },
+        isInt: {
             bail: true,
             errorMessage: "Valor incorrecto en el tipo de dependencia.",
         },
@@ -43,8 +42,7 @@ const updateDependenciaSchema = {
             errorMessage: "Es requerido el id tipo dependencia.",
             options: { values: 'falsy' }
         },
-        isNumeric: {
-            options: { no_symbols: true },
+        isInt: {
             bail: true,
             errorMessage: "Valor incorrecto en el tipo de dependencia.",
         },

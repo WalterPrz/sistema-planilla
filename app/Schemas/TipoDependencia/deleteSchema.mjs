@@ -3,8 +3,7 @@ import { verifyDataExist, callValidateFunc } from '../utils.mjs'
 const customVerifyExist = callValidateFunc(verifyDataExist);
 const deleteTipoDependenciaSchema = {
     id_dependencia: {
-        isNumeric: {
-            options: { no_symbols: true },
+        isInt: {
             bail: true,
             errorMessage: "Valor incorrecto en el tipo de dependencia.",
         },
