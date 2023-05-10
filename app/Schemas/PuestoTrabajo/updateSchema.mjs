@@ -2,15 +2,15 @@ import { PuestoTrabajo } from "../../../app/models/index.mjs";
 import Sequelize, { Op, where } from "sequelize";
 const verifyUnique = async (value, { req }) => {
   const valueMin = value.toLowerCase();
-  const user = await PuestoTrabjo.findOne({
+  const exist = await PuestoTrabajo.findOne({
     where: {
       [Op.and]: [
-        Sequelize.literal(`lower(nombre_puesto_trabajo) = ${valueMin}`),
-        { id_puesto_trabajo: { [Op.ne]: req.id_puesto_trabajo } },
+        Sequelize.literal(`lower(nombre_puesto_trabajo) = '${valueMin}'`),
+        { id_puesto_trabajo: { [Op.ne]: req.params.id_puesto_trabajo } },
       ],
     },
   });
-  if (user) {
+  if (exist) {
     throw new Error("El nombre ya existe");
   } else {
     return true;

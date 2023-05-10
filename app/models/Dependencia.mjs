@@ -10,10 +10,12 @@ class Dependencia extends Model {
         foreignKey: 'id_tipo_dependencia'
     })
     this.hasMany(Dependencia,{
-        foreignKey: 'id_dependencia_padre'
+        foreignKey: 'id_dependencia_padre',
+        as:'hijos_dependencia'
     })
     this.belongsTo(Dependencia,{
-        foreignKey: 'id_dependencia_padre'
+        foreignKey: 'id_dependencia_padre',
+        as:'padre_dependencia'
     })
     this.hasMany(PuestoTrabajoDependencia,{
       foreignKey: 'id_dependencia'
