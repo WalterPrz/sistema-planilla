@@ -10,5 +10,6 @@ const router = Router();
 router.use('/auth',authRouter)
 router.use('/puesto_trabajo',[validateToken],puestoTrabajoRouter)
 router.use('/tipo_dependencia',[validateToken],tipoDependenciaRouter)
+router.use('/dependencia',[validateToken], dependenciaRouter)
 router.use('/puesto_dependencia',[validateToken], puestoTrabajoDependenciaRouter)
 export default router;
