@@ -24,7 +24,7 @@ Usuario.init(
       allowNull: true,
       references: {
         model: "rol",
-        key: "id_rol1",
+        key: "id_rol",
       },
     },
     id_empleado: {

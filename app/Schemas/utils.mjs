@@ -5,7 +5,6 @@ const verifyDataExist = async (value, req, pk_name, model) => {
         }
     })
     if (!!data) {
-        
         return true
     } else {
         throw new Error(`No existe el dato.`)

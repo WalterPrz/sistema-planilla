@@ -1,16 +1,16 @@
-import { PuestoTrabajoDependencia } from "../../models/index.mjs";
+import { Rol } from "../../models/index.mjs";
 import { verifyDataExist, callValidateFunc } from '../utils.mjs'
 const customVerifyExist = callValidateFunc(verifyDataExist);
-const deletePuestoTrabajoDependenciaSchema = {
-    id_puesto_trabajo_dependencia: {
+const deleteRolSchema = {
+    id_rol: {
         isInt: {
             bail: true,
             errorMessage: "Valor incorrecto en el id dependencia.",
         },
         custom: {
             bail: true,
-            options: customVerifyExist('id_puesto_trabajo_dependencia', PuestoTrabajoDependencia)
+            options: customVerifyExist('id_rol', Rol)
         },
     },
 };
-export default deletePuestoTrabajoDependenciaSchema;
+export default deleteRolSchema;

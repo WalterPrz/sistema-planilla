@@ -1,5 +1,5 @@
 import { TipoDependencia } from "../../../app/models/index.mjs";
-import Sequelize, { Op, where } from "sequelize";
+import Sequelize, { Op } from "sequelize";
 const verifyUnique = async (value, { req }) => {
   try{
     const valueMin = value.toLowerCase();

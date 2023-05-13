@@ -15,6 +15,10 @@ import DocumentoEmpleado from './DocumentoEmpleado.mjs';
 import Usuario from './Usuario.mjs';
 import Empleado from './Empleado.mjs';
 import RefreshToken from './RefreshToken.mjs';
+import Permiso from './Permiso.mjs';
+import TipoRol from './TipoRol.mjs';
+import Rol from './Rol.mjs';
+import PermisoRol from './PermisoRol.mjs';
 EstructuraTerritorial.associate();
 Departamento.associate();
 Municipio.associate();
@@ -32,6 +36,10 @@ DocumentoEmpleado.associate();
 Usuario.associate();
 Empleado.associate();
 RefreshToken.associate();
+Permiso.associate();
+TipoRol.associate();
+Rol.associate();
+PermisoRol.associate();
 export {
     EstructuraTerritorial,
     Departamento,
@@ -50,4 +58,8 @@ export {
     Usuario,
     Empleado,
     RefreshToken,
+    Permiso,
+    TipoRol,
+    Rol,
+    PermisoRol,
 }
