@@ -1,5 +1,5 @@
 import { Dependencia, TipoDependencia } from "../../models/index.mjs";
-import Sequelize, { Op, where } from "sequelize";
+import Sequelize, { Op } from "sequelize";
 import { verifyDataExist, callValidateFunc } from '../utils.mjs'
 const customVerifyExist = callValidateFunc(verifyDataExist);
 

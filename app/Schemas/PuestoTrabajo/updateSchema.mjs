@@ -1,5 +1,5 @@
 import { PuestoTrabajo } from "../../../app/models/index.mjs";
-import Sequelize, { Op, where } from "sequelize";
+import Sequelize, { Op } from "sequelize";
 const verifyUnique = async (value, { req }) => {
   const valueMin = value.toLowerCase();
   const exist = await PuestoTrabajo.findOne({
