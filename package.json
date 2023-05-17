@@ -2,7 +2,7 @@
   "name": "api-bad",
   "version": "1.0.0",
   "description": "Api para sistemas planillas",
-  "main": "app.js",
+  "main": "app.mjs",
   "scripts": {
     "start": "nodemon app.mjs"
   },
