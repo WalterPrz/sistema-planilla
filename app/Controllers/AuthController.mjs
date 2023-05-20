@@ -14,6 +14,7 @@ export default class AuthController {
       const usuario = await Usuario.create({
         correo_institucional,
         contrasena,
+        id_rol,
         activo: true,
       });
       res.status(HttpCode.HTTP_CREATED).json({
