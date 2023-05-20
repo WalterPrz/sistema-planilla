@@ -1,4 +1,6 @@
-import { Usuario } from "../models/index.mjs";
+import { Rol, Usuario } from "../models/index.mjs";
+import { verifyDataExist, callValidateFunc } from "./utils.mjs";
+const customVerifyExist = callValidateFunc(verifyDataExist);
 const verifyEmailExist = async (value) => {
   const user = await Usuario.findOne({
     where: { correo_institucional: value },
@@ -16,23 +18,38 @@ const RegisterSchema = {
   correo_institucional: {
     trim: true,
     notEmpty: {
-        bail: true,
-        errorMessage: "Debes ingresar un correo.",
+      bail: true,
+      errorMessage: "Debes ingresar un correo.",
     },
     escape: true,
     isEmail: {
-        bail: true,
-        errorMessage: "Tiene que ser un correo válido",
+      bail: true,
+      errorMessage: "Tiene que ser un correo válido",
     },
     custom: {
       errorMessage: "El correo ya existe.",
       options: verifyEmailExist,
     },
+    id_rol: {
+      exists: {
+        bail: true,
+        errorMessage: "Es requerido el rol",
+        options: { values: "falsy" },
+      },
+      isInt: {
+        bail: true,
+        errorMessage: "Valor incorrecto en el rol.",
+      },
+      custom: {
+        bail: true,
+        options: customVerifyExist("id_rol", Rol),
+      },
+    },
   },
   clave: {
     trim: true,
     notEmpty: {
-        bail: true,
+      bail: true,
       errorMessage: "Debes ingresar una clave",
     },
     escape: true,
@@ -44,7 +61,7 @@ const RegisterSchema = {
   confirmacionClave: {
     trim: true,
     notEmpty: {
-        bail: true,
+      bail: true,
       errorMessage: "Debes ingresar repetir la clave.",
     },
     escape: true,
