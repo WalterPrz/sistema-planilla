@@ -93,7 +93,7 @@ export default class DependenciaController {
                 },
             });
             if (!!existe) {
-                throw BadRequestException(
+                throw new BadRequestException(
                     "No se puede eliminar, existe puestos que tienen asignado este dependencia."
                 );
             }

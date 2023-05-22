@@ -59,7 +59,7 @@ export default class PermisoController {
                 },
             });
             if (!!existe) {
-                throw BadRequestException(
+                throw new BadRequestException(
                     "No se puede eliminar, existe roles que tienen asignado este permiso."
                 );
             }

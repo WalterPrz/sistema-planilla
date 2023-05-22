@@ -6,7 +6,10 @@ import dependenciaRouter from './api/dependencia.mjs'
 import puestoTrabajoDependenciaRouter from './api/puestoTrabajoDependencia.mjs'
 import rolRouter from './api/rol.mjs'
 import permisoRouter from './api/permiso.mjs'
+import empresaRouter from './api/empresa.mjs'
+import centroCostoRouter from './api/centroCosto.mjs'
 import {validateToken} from "../app/middlewares/AuthMiddlewares.mjs";
+
 const router = Router();
 
 router.use('/auth',authRouter)
@@ -16,4 +19,7 @@ router.use('/dependencia',[validateToken], dependenciaRouter)
 router.use('/puesto_dependencia',[validateToken], puestoTrabajoDependenciaRouter)
 router.use('/permiso',[validateToken], permisoRouter)
 router.use('/rol',[validateToken], rolRouter)
+router.use('/empresa',[validateToken], empresaRouter)
+router.use('/centro_costo',[validateToken], centroCostoRouter)
+
 export default router;

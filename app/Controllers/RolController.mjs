@@ -148,7 +148,7 @@ export default class RolController {
                 },
             });
             if (!!existe) {
-                throw BadRequestException(
+                throw new BadRequestException(
                     "No se puede eliminar, existe usuarios que tienen asignado este rol."
                 );
             }
