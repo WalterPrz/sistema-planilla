@@ -7,11 +7,22 @@ import {
 } from "../models/index.mjs";
 import HttpCode from "../../configs/HttpCodes.mjs";
 import BadRequestException from "../../handlers/BadRequestException.mjs";
+import Sequelize, { Op } from "sequelize";
 
 export default class DependenciaController {
     static async index(req, res) {
         try {
             const datos = await PuestoTrabajoDependencia.findAll({
+                attributes:[
+                    "id_puesto_trabajo_dependencia",
+                    "id_puesto_trabajo",
+                    "id_dependencia",
+                    "salario_minimo",
+                    "salario_maximo",
+                    "plazas",
+                    "jefatura",
+                    [Sequelize.literal('salario_maximo * plazas'), 'plazas_salario'],
+                ],
                 include: [
                     {
                         attributes: ['nombre_puesto_trabajo'],
@@ -35,6 +46,7 @@ export default class DependenciaController {
                     salario_minimo: x.salario_minimo ,
                     salario_maximo: x.salario_maximo ,
                     plazas: x.plazas ,
+                    plazas_salario: x.dataValues.plazas_salario,
                     jefatura: x.jefatura ,
                     nombre_puesto_trabajo: x.PuestoTrabajo.nombre_puesto_trabajo,
                     nombre_dependencia: `${x.Dependencium.TipoDependencium.nombre_tipo_dependencia} ${x.Dependencium.nombre_dependencia}`
@@ -100,7 +112,7 @@ export default class DependenciaController {
                 },
             });
             if (!!existe) {
-                throw BadRequestException(
+                throw new BadRequestException(
                     "No se puede eliminar, existe empleados que tienen asignado este puesto."
                 );
             }

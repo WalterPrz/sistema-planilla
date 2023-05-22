@@ -49,7 +49,7 @@ export default class PuestoTrabajoController{
                 }
             })
             if(!!existe){
-                throw BadRequestException("No se puede eliminar, existe dependencias que tienen asignado este puesto.")
+                throw new BadRequestException("No se puede eliminar, existe dependencias que tienen asignado este puesto.")
             }
             await TipoDependencia.destroy({
                 where:{
