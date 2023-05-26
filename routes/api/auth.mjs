@@ -9,4 +9,5 @@ const router = Router();
 router.post('/login',[validateSchema(LoginSchema)],Call(AuthController.login))
 router.post('/logout',[validateToken],Call(AuthController.logout))
 router.post('/register',[validateSchema(RegisterSchema)],Call(AuthController.register))
+router.get('/verify-token',[validateToken],Call(AuthController.isTokenExpired))
 export default router;

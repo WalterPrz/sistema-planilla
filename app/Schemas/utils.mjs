@@ -31,6 +31,11 @@ const callValidateFunc = (validationFn) => {
     //     };
     // }
 };
+const callArrayValidateFunc = (arrayFunc)=>{
+    for (const item of arrayFunc) {
+        (...args)=>(value,{req})=>item(value, req, ...args)
+    }
+}
 
 
-export { verifyDataExist, callValidateFunc }
+export { verifyDataExist, callValidateFunc,callArrayValidateFunc }
