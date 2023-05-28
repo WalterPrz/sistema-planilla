@@ -19,6 +19,7 @@ import Permiso from './Permiso.mjs';
 import TipoRol from './TipoRol.mjs';
 import Rol from './Rol.mjs';
 import PermisoRol from './PermisoRol.mjs';
+import CondicionDeduccion from './Deduccion.mjs';
 EstructuraTerritorial.associate();
 Departamento.associate();
 Municipio.associate();
@@ -40,6 +41,7 @@ Permiso.associate();
 TipoRol.associate();
 Rol.associate();
 PermisoRol.associate();
+CondicionDeduccion.associate();
 export {
     EstructuraTerritorial,
     Departamento,
