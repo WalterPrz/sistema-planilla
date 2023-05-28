@@ -1,7 +1,6 @@
 import { Dependencia, CentroCosto } from "../../models/index.mjs";
 import Sequelize, { Op } from "sequelize";
 import { verifyDataExist, callValidateFunc } from '../utils.mjs'
-const customVerifyExist = callValidateFunc(verifyDataExist);
 const verifyDecimals = (value) => {
     const valid = /^\d+(\.\d{2})?$/.test(value)
     if (!valid) {
@@ -12,7 +11,6 @@ const verifyDecimals = (value) => {
 
 }
 const verifyIsFirst = async (value, { req }) => {
-    console.log("aca")
     const all = await CentroCosto.findOne(
         {
             where: {
@@ -27,6 +25,14 @@ const verifyIsFirst = async (value, { req }) => {
         return true
     }
 }
+const validateIdDependencia = async (value, { req }) => {
+    try {
+        await verifyDataExist(value, req, 'id_dependencia', Dependencia);
+        await verifyIsFirst(value, { req })
+    } catch (e) {
+        throw e
+    }
+}
 const createCentroCostoSchema = {
     id_dependencia: {
         exists: {
@@ -38,13 +44,10 @@ const createCentroCostoSchema = {
             bail: true,
             errorMessage: "Valor incorrecto en el tipo de dependencia.",
         },
-        custom:{
-            options: customVerifyExist('id_dependencia', Dependencia)
+        custom: {
+            bail: true,
+            options: validateIdDependencia
         }
-        // custom: {
-        //     bail: true,
-        //     options: xd([verifyDataExist('id_partida_contable', CentroCosto), verifyIsFirst])
-        // }
     },
     monto_anual: {
         exists: {

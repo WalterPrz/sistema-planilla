@@ -4,7 +4,7 @@ import {EstructuraTerritorial, Municipio} from './index.mjs'
 class Departamento extends Model{
   static associate(){
     this.belongsTo(EstructuraTerritorial,{
-      foreignKey:'id_estructura_territorial'
+      foreignKey:'id_territorio'
     })
     this.hasMany(Municipio,{
       foreignKey:'id_departamento'

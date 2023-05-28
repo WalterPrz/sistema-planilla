@@ -1,7 +1,6 @@
 import { Empresa } from "../../models/index.mjs";
 import { verifyDataExist, callValidateFunc } from '../utils.mjs'
-const customVerifyExist = callValidateFunc(verifyDataExist);
-
+const validate = callValidateFunc(verifyDataExist)
 const updateEmpresaSchema = {
     id_empresa: {
         isInt: {
@@ -10,7 +9,7 @@ const updateEmpresaSchema = {
         },
         custom: {
             bail: true,
-            options: customVerifyExist('id_empresa', Empresa)
+            options: validate('id_empresa', Empresa)
         },
     },
     nombre_empresa: {

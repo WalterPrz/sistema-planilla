@@ -86,4 +86,7 @@ export default class AuthController {
       throw e;
     }
   }
+  static async isTokenExpired(req, res){
+    return res.status(HttpCode.HTTP_OK).send({message:'El token es válido'});
+  }
 }

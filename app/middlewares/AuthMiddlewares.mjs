@@ -27,7 +27,13 @@ const validateToken = async(req, res, next) => {
         message: "Token expirado",
       });
     }else{
-      next(e);
+      if(e.name === "JsonWebTokenError"){
+        return res.status(HttpCode.HTTP_UNAUTHORIZED).json({
+          message: "Token inválido",
+        })
+      }else{
+        next(e);
+      }
     }
   }
 }
