@@ -1,10 +1,15 @@
 import { Model, DataTypes } from "sequelize";
 import DB from "../DB/connection.mjs";
-import { PermisoRol } from "./index.mjs";
+import { PermisoRol, TipoPermiso } from "./index.mjs";
 class Permiso extends Model {
     static associate() {
         this.hasMany(PermisoRol,{
             foreignKey:'id_permiso'
+        })
+    }
+    static associate() {
+        this.belongsTo(TipoPermiso,{
+            foreignKey:'id_tipo_permiso'
         })
     }
 }
@@ -19,7 +24,15 @@ Permiso.init(
         nombre_permiso: {
             type: DataTypes.STRING(50),
             allowNull: false
-        }
+        },
+        id_tipo_permiso: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            references: {
+                model: 'tipo_permiso',
+                key: 'id_tipo_permiso'
+            }
+        },
     },
     {
         sequelize: DB.connection(),

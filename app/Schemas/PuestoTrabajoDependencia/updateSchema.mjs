@@ -32,6 +32,22 @@ const verifyNotExist  = async (value,{req})=>{
         return true
     } 
 }
+const validateIdPuestoTrabajo = async (value,{req})=>{
+    try{
+        await verifyDataExist(value, req, 'id_puesto_trabajo', PuestoTrabajo)
+        await verifyNotExist(value, {req})
+    }catch(e){
+        throw e
+    }
+}
+const validateSalarioMinimo = async (value, {req})=>{
+    try{
+        verifyDecimals(value);
+        verifyIsMayor(value, { req })
+    }catch(e){
+        throw e
+    }
+}
 const updatePuestoTrabajoDependenciaSchema = {
     id_puesto_trabajo_dependencia:{
         isInt: {
@@ -55,12 +71,8 @@ const updatePuestoTrabajoDependenciaSchema = {
         },
         custom: {
             bail: true,
-            options: customVerifyExist('id_puesto_trabajo', PuestoTrabajo)
+            options: validateIdPuestoTrabajo
         },
-        custom: {
-            bail: true,
-            options: verifyNotExist
-        }
     },
     id_dependencia: {
         exists: {
@@ -90,11 +102,7 @@ const updatePuestoTrabajoDependenciaSchema = {
         },
         custom: {
             bail: true,
-            options: verifyDecimals,
-        },
-        custom: {
-            bail: true,
-            options: verifyIsMayor,
+            options: validateSalarioMinimo,
         },
     },
     salario_maximo: {

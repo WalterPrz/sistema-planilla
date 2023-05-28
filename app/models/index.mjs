@@ -16,7 +16,7 @@ import Usuario from './Usuario.mjs';
 import Empleado from './Empleado.mjs';
 import RefreshToken from './RefreshToken.mjs';
 import Permiso from './Permiso.mjs';
-import TipoRol from './TipoRol.mjs';
+import TipoPermiso from './TipoPermiso.mjs';
 import Rol from './Rol.mjs';
 import PermisoRol from './PermisoRol.mjs';
 EstructuraTerritorial.associate();
@@ -37,7 +37,7 @@ Usuario.associate();
 Empleado.associate();
 RefreshToken.associate();
 Permiso.associate();
-TipoRol.associate();
+TipoPermiso.associate();
 Rol.associate();
 PermisoRol.associate();
 export {
@@ -59,7 +59,7 @@ export {
     Empleado,
     RefreshToken,
     Permiso,
-    TipoRol,
+    TipoPermiso,
     Rol,
     PermisoRol,
 }

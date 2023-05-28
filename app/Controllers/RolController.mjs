@@ -2,7 +2,6 @@ import {
     Rol,
     Permiso,
     PermisoRol,
-    TipoRol,
     Usuario,
 } from "../models/index.mjs";
 import HttpCode from "../../configs/HttpCodes.mjs";
@@ -15,10 +14,6 @@ export default class RolController {
         try {
             const datos = await Rol.findAll({
                 include: [
-                    {
-                        attributes: ['nombre_tipo_rol'],
-                        model: TipoRol,
-                    },
                     {
                         model: PermisoRol,
                         include: {
@@ -38,10 +33,8 @@ export default class RolController {
                 })
                 return {
                     id_rol: x.id_rol,
-                    id_tipo_rol: x.id_tipo_rol,
                     descripcion_rol: x.descripcion_rol,
                     nombre_rol: x.nombre_rol,
-                    nombre_tipo_rol: x.TipoRol.nombre_tipo_rol,
                     PermisoRols: permisos
                 }
             })
@@ -55,10 +48,9 @@ export default class RolController {
         const connection = DB.connection();
         const t = await connection.transaction();
         try {
-            const { id_tipo_rol, descripcion_rol, nombre_rol, array_permisos } =
+            const { descripcion_rol, nombre_rol, array_permisos } =
                 req.body;
             const rol = await Rol.create({
-                id_tipo_rol,
                 descripcion_rol,
                 nombre_rol,
             }, { transaction: t });
@@ -81,11 +73,10 @@ export default class RolController {
         const connection = DB.connection();
         const t = await connection.transaction();
         try {
-            const { id_tipo_rol, descripcion_rol, nombre_rol, array_permisos, change_permisos } =
+            const { descripcion_rol, nombre_rol, array_permisos, change_permisos } =
                 req.body;
             const { id_rol } = req.params;
             await Rol.update({
-                id_tipo_rol,
                 descripcion_rol,
                 nombre_rol,
             }, {

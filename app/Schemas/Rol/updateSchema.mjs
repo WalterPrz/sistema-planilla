@@ -1,4 +1,4 @@
-import { Permiso, Rol, TipoRol } from "../../../app/models/index.mjs";
+import { Permiso, Rol } from "../../../app/models/index.mjs";
 import Sequelize, { Op } from "sequelize";
 import { verifyDataExist, callValidateFunc } from '../utils.mjs'
 const customVerifyExist = callValidateFunc(verifyDataExist);
@@ -42,21 +42,6 @@ const createRolSchema = {
         custom: {
             bail: true,
             options: customVerifyExist('id_rol', Rol)
-        },
-    },
-    id_tipo_rol: {
-        exists: {
-            bail: true,
-            errorMessage: "Es requerido el tipo rol",
-            options: { values: 'falsy' }
-        },
-        isInt: {
-            bail: true,
-            errorMessage: "Valor incorrecto en el tipo rol",
-        },
-        custom: {
-            bail: true,
-            options: customVerifyExist('id_tipo_rol', TipoRol)
         },
     },
     descripcion_rol: {

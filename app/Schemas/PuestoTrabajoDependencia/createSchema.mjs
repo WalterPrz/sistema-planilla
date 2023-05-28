@@ -9,7 +9,6 @@ const verifyDecimals = (value) => {
     } else {
         return true
     }
-
 }
 const verifyIsMayor = (value, { req }) => {
     if (value > req.body.salario_maximo) {
@@ -18,18 +17,13 @@ const verifyIsMayor = (value, { req }) => {
         return true
     }
 }
-const verifyNotExist  = async (value,{req})=>{
-    const puesto = await PuestoTrabajoDependencia.findOne({
-        where:{
-            id_dependencia: req.body.id_dependencia,
-            id_puesto_trabajo: req.body.id_puesto_trabajo,
-        }
-    })
-    if (!!puesto) {
-        throw new Error("Ya existe el puesto de trabajo en esta dependencia.")
-    }else{
-        return true
-    } 
+const validateSalarioMinimo = async (value, {req})=>{
+    try{
+        verifyDecimals(value);
+        verifyIsMayor(value, { req })
+    }catch(e){
+        throw e
+    }
 }
 const createPuestoTrabajoDependenciaSchema = {
     id_puesto_trabajo: {
@@ -46,10 +40,6 @@ const createPuestoTrabajoDependenciaSchema = {
             bail: true,
             options: customVerifyExist('id_puesto_trabajo', PuestoTrabajo)
         },
-        custom: {
-            bail: true,
-            options: verifyNotExist
-        }
     },
     id_dependencia: {
         exists: {
@@ -79,11 +69,7 @@ const createPuestoTrabajoDependenciaSchema = {
         },
         custom: {
             bail: true,
-            options: verifyDecimals,
-        },
-        custom: {
-            bail: true,
-            options: verifyIsMayor,
+            options: validateSalarioMinimo,
         },
     },
     salario_maximo: {

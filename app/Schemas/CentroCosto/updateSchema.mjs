@@ -9,8 +9,13 @@ const verifyDecimals = (value) => {
     } else {
         return true
     }
-
 }
+const validateIdDependencia=(value, {req})=>{
+    verifyDataExist(value, req, 'id_dependencia', Dependencia)
+    verifyIsFirst(value, {req})
+}
+
+
 const verifyIsFirst = async (value, { req }) => {
     const all = await CentroCosto.findOne(
         {
@@ -55,11 +60,7 @@ const createDependenciaSchema = {
         },
         custom: {
             bail: true,
-            options: customVerifyExist('id_dependencia', Dependencia)
-        },
-        custom: {
-            bail: true,
-            options: verifyIsFirst
+            options: validateIdDependencia
         },
     },
     monto_anual: {
