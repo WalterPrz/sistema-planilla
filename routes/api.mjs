@@ -9,6 +9,7 @@ import permisoRouter from './api/permiso.mjs'
 import empresaRouter from './api/empresa.mjs'
 import centroCostoRouter from './api/centroCosto.mjs'
 import deduccionesRouter from './api/deducciones.mjs';
+import empleadosRouter from './api/empleadosRouter.mjs';
 import { validateToken } from "../app/middlewares/AuthMiddlewares.mjs";
 
 const router = Router();
@@ -22,6 +23,7 @@ router.use('/permiso', [validateToken], permisoRouter)
 router.use('/rol', [validateToken], rolRouter)
 router.use('/empresa', [validateToken], empresaRouter)
 router.use('/centro_costo', [validateToken], centroCostoRouter)
-router.use('/deducciones', [validateToken], deduccionesRouter);
+router.use('/deducciones', deduccionesRouter);
+router.use('/empleados', empleadosRouter);
 
 export default router;
