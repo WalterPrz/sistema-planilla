@@ -1,9 +1,9 @@
 import { Model, DataTypes } from "sequelize";
 import DB from "../DB/connection.mjs";
-import { DocumentoEmpleado } from "./index.mjs";
+import { Documento } from "./index.mjs";
 class TipoDocumento extends Model {
   static associate() {
-    this.hasMany(DocumentoEmpleado,{
+    this.hasMany(Documento,{
       foreignKey: 'id_tipo_documento'
     })
   }
@@ -26,18 +26,6 @@ TipoDocumento.init(
     tableName: "tipo_documento",
     schema: "public",
     timestamps: false,
-    indexes: [
-      {
-        name: "pk_tipo_documento",
-        unique: true,
-        fields: [{ name: "id_tipo_documento" }],
-      },
-      {
-        name: "tipo_documento_pk",
-        unique: true,
-        fields: [{ name: "id_tipo_documento" }],
-      },
-    ],
   }
 );
 export default TipoDocumento;

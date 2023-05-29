@@ -5,7 +5,8 @@ import {
     EstadoCivil,
     Genero,
     Profesion,
-    TipoDocumento
+    TipoDocumento,
+    Documento
 } from "../models/index.mjs";
 import HttpCode from "../../configs/HttpCodes.mjs";
 
@@ -58,4 +59,16 @@ export default class CatalogoController {
         const datos = await TipoDocumento.findAll()
         res.status(HttpCode.HTTP_OK).json(datos);
     }
+    static async getDocumento(req, res){
+        const {id_tipo_documento}= req.query
+        let filtro = {}
+        if(!!id_tipo_documento){
+            filtro = {
+                id_tipo_documento,
+            }
+        }
+        const datos = await Documento.findAll({ where:filtro})
+        res.status(HttpCode.HTTP_OK).json(datos);
+    }
+    
 }

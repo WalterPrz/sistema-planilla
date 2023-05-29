@@ -9,6 +9,7 @@ import permisoRouter from './api/permiso.mjs'
 import empresaRouter from './api/empresa.mjs'
 import centroCostoRouter from './api/centroCosto.mjs'
 import catalogoRouter from './api/catalogo.mjs'
+import empleadoRouter from './api/empleado.mjs'
 import {validateToken} from "../app/middlewares/AuthMiddlewares.mjs";
 import { validationResult } from "express-validator";
 
@@ -24,5 +25,6 @@ router.use('/rol',[validateToken], rolRouter)
 router.use('/empresa',[validateToken], empresaRouter)
 router.use('/centro_costo',[validateToken], centroCostoRouter)
 router.use('/catalogo', [validateToken], catalogoRouter)
+router.use('/empleado', empleadoRouter)
 
 export default router;

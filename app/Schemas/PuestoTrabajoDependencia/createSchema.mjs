@@ -65,7 +65,7 @@ const createPuestoTrabajoDependenciaSchema = {
         isFloat: {
             bail: true,
             errorMessage: "El valor debe estar entre 100 y 100,000",
-            options: { min: '100', max: '100000' }
+            options: { min: 100, max: 100000 }
         },
         custom: {
             bail: true,
@@ -81,7 +81,7 @@ const createPuestoTrabajoDependenciaSchema = {
         isFloat: {
             bail: true,
             errorMessage: "El valor debe estar entre 100 y 100,000",
-            options: { min: '100', max: '100000' }
+            options: { min: 100, max: 100000 }
         },
         custom: {
             bail: true,
@@ -96,7 +96,7 @@ const createPuestoTrabajoDependenciaSchema = {
         },
         isInt: {
             bail: true,
-            options: { min: '1', max: '10000' },
+            options: { min: 1, max: 100 },
             errorMessage: "Debe ser un numero entero entre 1 y 10000",
         },
     },
