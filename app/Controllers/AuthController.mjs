@@ -15,6 +15,7 @@ export default class AuthController {
         correo_institucional,
         contrasena,
         id_rol,
+        id_empleado,
         activo: true,
       });
       res.status(HttpCode.HTTP_CREATED).json({
