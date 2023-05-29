@@ -10,5 +10,6 @@ router.get('/estado-civil',Call(CatalogosController.getEstadoCivil))
 router.get('/genero',Call(CatalogosController.getGenero))
 router.get('/profesion',Call(CatalogosController.getProfesion))
 router.get('/tipo-documento',Call(CatalogosController.getTipoDocumento))
+router.get('/documento',Call(CatalogosController.getDocumento))
 
 export default router;

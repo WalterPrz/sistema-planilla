@@ -72,7 +72,7 @@ const createDependenciaSchema = {
         isFloat: {
             bail: true,
             errorMessage: "El valor debe estar entre 100 y 1,000,000",
-            options: { min: '100', max: '1000000' }
+            options: { min: 100, max: 1000000 }
         },
         custom: {
             bail: true,
@@ -87,7 +87,7 @@ const createDependenciaSchema = {
         },
         isInt: {
             bail: true,
-            options: { min: '2023', max: '2100' },
+            options: { min: 2023, max: 2100 },
             errorMessage: "Debe ser un año válido",
         },
     }
