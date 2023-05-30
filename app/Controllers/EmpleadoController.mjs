@@ -343,4 +343,17 @@ export default class EmpleadoController {
     };
     return empleadoLimpio;
   }
+  static async downEmpleado(req, res) {
+    try {
+      const { id_empleado } = req.params;
+      await Empleado.update({
+        fecha_fin: new Date()
+      },{where:{id_empleado}})
+      return res
+        .status(HttpCode.HTTP_OK)
+        .json({ message: "Ha sido creado con éxito", empleado });
+    } catch (e) {
+      throw e;
+    }
+  }
 }

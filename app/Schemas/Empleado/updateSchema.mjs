@@ -1,289 +1,303 @@
 import {
-    Empleado,
-    PuestoTrabajoDependencia,
-    Genero,
-    EstadoCivil,
-    Municipio,
-    Profesion,
-    Usuario,
-    TipoDocumento,
-    DocumentoEmpleado,
-  } from "../../../app/models/index.mjs";
-  import Sequelize, { Op } from "sequelize";
-  import { verifyDataExist, callValidateFunc } from "../utils.mjs";
-  import {
-    validateIdPuestoTrabajoDependenciaCreate,
-    validateIdPuestoTrabajoDependenciaUpdate,
-    verifyIsOld,
-    validateSalarioCreate,
-    validateArrayDocumentos,
-    setOnlyByTipo,
-    validateArrayDocumentosUpdate
-  } from "./utils.mjs";
-  const customVerifyExist = callValidateFunc(verifyDataExist);
-  
-  const updateEmpleadoSchema = {
-    id_puesto_trabajo_dependencia: {
-      exists: {
-        bail: true,
-        errorMessage: "Es requerido el id tipo dependencia.",
-        options: { values: "falsy" },
-      },
-      isInt: {
-        bail: true,
-        errorMessage: "Valor incorrecto en el tipo de dependencia.",
-      },
-      custom: {
-        bail: true,
-        options: validateIdPuestoTrabajoDependenciaUpdate,
-      },
+  Empleado,
+  PuestoTrabajoDependencia,
+  Genero,
+  EstadoCivil,
+  Municipio,
+  Profesion,
+  Usuario,
+  TipoDocumento,
+  DocumentoEmpleado,
+} from "../../../app/models/index.mjs";
+import Sequelize, { Op } from "sequelize";
+import { verifyDataExist, callValidateFunc } from "../utils.mjs";
+import {
+  validateIdPuestoTrabajoDependenciaCreate,
+  validateIdPuestoTrabajoDependenciaUpdate,
+  verifyIsOld,
+  validateSalarioCreate,
+  validateArrayDocumentos,
+  setOnlyByTipo,
+  validateArrayDocumentosUpdate,
+} from "./utils.mjs";
+const customVerifyExist = callValidateFunc(verifyDataExist);
+
+const updateEmpleadoSchema = {
+  id_empleado: {
+    exists: {
+      bail: true,
+      errorMessage: "Es requerido el id del empleado",
+      options: { values: "falsy" },
     },
-    id_genero: {
-      exists: {
-        bail: true,
-        errorMessage: "Es requerido el género",
-        options: { values: "falsy" },
-      },
-      isInt: {
-        bail: true,
-        errorMessage: "Valor incorrecto en el género.",
-      },
-      custom: {
-        bail: true,
-        options: customVerifyExist("id_genero", Genero),
-      },
+    isInt: {
+      bail: true,
+      errorMessage: "Valor incorrecto en el id empleado.",
     },
-    id_estado_civil: {
-      exists: {
-        bail: true,
-        errorMessage: "Es requerido el estado civil.",
-        options: { values: "falsy" },
-      },
-      isInt: {
-        bail: true,
-        errorMessage: "Valor incorrecto el estado civil.",
-      },
-      custom: {
-        bail: true,
-        options: customVerifyExist("id_estado_civil", EstadoCivil),
-      },
+    custom: {
+      bail: true,
+      options: customVerifyExist("id_empleado", Empleado),
     },
-    id_municipio: {
-      exists: {
-        bail: true,
-        errorMessage: "Es requerido el id tipo dependencia.",
-        options: { values: "falsy" },
-      },
-      isInt: {
-        bail: true,
-        errorMessage: "Valor incorrecto en el municipio.",
-      },
-      custom: {
-        bail: true,
-        options: customVerifyExist("id_municipio", Municipio),
-      },
+  },
+  id_puesto_trabajo_dependencia: {
+    exists: {
+      bail: true,
+      errorMessage: "Es requerido el id tipo dependencia.",
+      options: { values: "falsy" },
     },
-    id_profesion: {
-      exists: {
-        bail: true,
-        errorMessage: "Es requerido la profesión.",
-        options: { values: "falsy" },
-      },
-      isInt: {
-        bail: true,
-        errorMessage: "Valor incorrecto en la profesión.",
-      },
-      custom: {
-        bail: true,
-        options: customVerifyExist("id_profesion", Profesion),
-      },
+    isInt: {
+      bail: true,
+      errorMessage: "Valor incorrecto en el tipo de dependencia.",
     },
-    array_documentos: {
-      exists: {
-        bail: true,
-        errorMessage: "Es requerido el array de documentos.",
-      },
-      isArray: {
-        bail: true,
-      },
-      customSanitizer: {
-        options: setOnlyByTipo,
-      },
-      custom: {
-        bail: true,
-        options: validateArrayDocumentosUpdate,
-      },
+    custom: {
+      bail: true,
+      options: validateIdPuestoTrabajoDependenciaUpdate,
     },
-    apellido_casada: {
-      trim: true,
-      escape: true,
-      isString: true,
-      isLength: {
-        options: {
-          min: 0,
-          max: 30,
-        },
-        errorMessage: "Máximo 30 caracteres",
-      },
+  },
+  id_genero: {
+    exists: {
+      bail: true,
+      errorMessage: "Es requerido el género",
+      options: { values: "falsy" },
     },
-    barrio_colonia_residencial: {
-      trim: true,
-      escape: true,
-      isString: true,
-      isLength: {
-        options: {
-          min: 0,
-          max: 50,
-        },
-        errorMessage: "Máximo 50 caracteres",
-      },
+    isInt: {
+      bail: true,
+      errorMessage: "Valor incorrecto en el género.",
     },
-    calle_avenida: {
-      trim: true,
-      notEmpty: {
-        bail: true,
-        errorMessage: "Debes ingresar una calle o avenida",
-      },
-      escape: true,
-      isString: true,
-      isLength: {
-        options: {
-          min: 1,
-          max: 50,
-        },
-        errorMessage: "Máximo 50 caracteres",
-      },
+    custom: {
+      bail: true,
+      options: customVerifyExist("id_genero", Genero),
     },
-    fecha_de_nacimiento: {
-      trim: true,
-      notEmpty: {
-        bail: true,
-        errorMessage: "Debes ingresar una fecha de nacimiento",
-      },
-      escape: true,
-      isDate: {
-        options: {
-          format: "YYYY-MM-DD",
-        },
-        errorMessage: "Fecha de nacimiento inválida",
-      },
-      custom: {
-        options: verifyIsOld,
-      },
+  },
+  id_estado_civil: {
+    exists: {
+      bail: true,
+      errorMessage: "Es requerido el estado civil.",
+      options: { values: "falsy" },
     },
-    id_empleado_jefe: {
-      // isInt: {
-      //   options:{
-      //     allow_leading_zeroes:true
-      //   },
-      //   bail: true,
-      //   errorMessage: "Valor incorrecto para el empleado jefe.",
-      // },
-      // custom: {
-      //   bail: true,
-      //   options: customVerifyExist("id_empleado", Empleado),
-      // },
+    isInt: {
+      bail: true,
+      errorMessage: "Valor incorrecto el estado civil.",
     },
-    numero_casa_apto: {
-      trim: true,
-      notEmpty: {
-        bail: true,
-        errorMessage: "Debes ingresar el número de casa o apartamento",
-      },
-      escape: true,
-      isString: true,
-      isLength: {
-        options: {
-          min: 1,
-          max: 25,
-        },
-        errorMessage: "Máximo 25 caracteres",
-      },
+    custom: {
+      bail: true,
+      options: customVerifyExist("id_estado_civil", EstadoCivil),
     },
-    pasaje_senda: {
-      trim: true,
-      escape: true,
-      isString: true,
-      isLength: {
-        options: {
-          min: 0,
-          max: 25,
-        },
-        errorMessage: "Máximo 50 caracteres",
-      },
+  },
+  id_municipio: {
+    exists: {
+      bail: true,
+      errorMessage: "Es requerido el id tipo dependencia.",
+      options: { values: "falsy" },
     },
-    primer_apellido: {
-      trim: true,
-      notEmpty: {
-        bail: true,
-        errorMessage: "Debes ingresar el primer apellido.",
-      },
-      escape: true,
-      isString: true,
-      isLength: {
-        options: {
-          min: 1,
-          max: 30,
-        },
-        errorMessage: "Máximo 30 caracteres",
-      },
+    isInt: {
+      bail: true,
+      errorMessage: "Valor incorrecto en el municipio.",
     },
-    primer_nombre: {
-      trim: true,
-      notEmpty: {
-        bail: true,
-        errorMessage: "Debes ingresar el primer nombre.",
-      },
-      escape: true,
-      isString: true,
-      isLength: {
-        options: {
-          min: 1,
-          max: 30,
-        },
-        errorMessage: "Máximo 30 caracteres",
-      },
+    custom: {
+      bail: true,
+      options: customVerifyExist("id_municipio", Municipio),
     },
-    salario: {
-      exists: {
-        bail: true,
-        errorMessage: "Es requerido el salario máximo",
-        options: { values: "falsy" },
-      },
-      isFloat: {
-        bail: true,
-        errorMessage: "El valor debe estar entre 100 y 100,000",
-        options: { min: 100, max: 100000 },
-      },
-      custom: {
-        bail: true,
-        options: validateSalarioCreate,
-      },
+  },
+  id_profesion: {
+    exists: {
+      bail: true,
+      errorMessage: "Es requerido la profesión.",
+      options: { values: "falsy" },
     },
-    segundo_apellido: {
-      trim: true,
-      escape: true,
-      isString: true,
-      isLength: {
-        options: {
-          min: 0,
-          max: 30,
-        },
-        errorMessage: "Máximo 30 caracteres",
-      },
+    isInt: {
+      bail: true,
+      errorMessage: "Valor incorrecto en la profesión.",
     },
-    segundo_nombre: {
-      trim: true,
-      escape: true,
-      isString: true,
-      isLength: {
-        options: {
-          min: 0,
-          max: 30,
-        },
-        errorMessage: "Máximo 30 caracteres",
-      },
+    custom: {
+      bail: true,
+      options: customVerifyExist("id_profesion", Profesion),
     },
-  };
-  export default updateEmpleadoSchema;
-  
+  },
+  array_documentos: {
+    exists: {
+      bail: true,
+      errorMessage: "Es requerido el array de documentos.",
+    },
+    isArray: {
+      bail: true,
+    },
+    customSanitizer: {
+      options: setOnlyByTipo,
+    },
+    custom: {
+      bail: true,
+      options: validateArrayDocumentosUpdate,
+    },
+  },
+  apellido_casada: {
+    trim: true,
+    escape: true,
+    isString: true,
+    isLength: {
+      options: {
+        min: 0,
+        max: 30,
+      },
+      errorMessage: "Máximo 30 caracteres",
+    },
+  },
+  barrio_colonia_residencial: {
+    trim: true,
+    escape: true,
+    isString: true,
+    isLength: {
+      options: {
+        min: 0,
+        max: 50,
+      },
+      errorMessage: "Máximo 50 caracteres",
+    },
+  },
+  calle_avenida: {
+    trim: true,
+    notEmpty: {
+      bail: true,
+      errorMessage: "Debes ingresar una calle o avenida",
+    },
+    escape: true,
+    isString: true,
+    isLength: {
+      options: {
+        min: 1,
+        max: 50,
+      },
+      errorMessage: "Máximo 50 caracteres",
+    },
+  },
+  fecha_de_nacimiento: {
+    trim: true,
+    notEmpty: {
+      bail: true,
+      errorMessage: "Debes ingresar una fecha de nacimiento",
+    },
+    escape: true,
+    isDate: {
+      options: {
+        format: "YYYY-MM-DD",
+      },
+      errorMessage: "Fecha de nacimiento inválida",
+    },
+    custom: {
+      options: verifyIsOld,
+    },
+  },
+  id_empleado_jefe: {
+    // isInt: {
+    //   options:{
+    //     allow_leading_zeroes:true
+    //   },
+    //   bail: true,
+    //   errorMessage: "Valor incorrecto para el empleado jefe.",
+    // },
+    // custom: {
+    //   bail: true,
+    //   options: customVerifyExist("id_empleado", Empleado),
+    // },
+  },
+  numero_casa_apto: {
+    trim: true,
+    notEmpty: {
+      bail: true,
+      errorMessage: "Debes ingresar el número de casa o apartamento",
+    },
+    escape: true,
+    isString: true,
+    isLength: {
+      options: {
+        min: 1,
+        max: 25,
+      },
+      errorMessage: "Máximo 25 caracteres",
+    },
+  },
+  pasaje_senda: {
+    trim: true,
+    escape: true,
+    isString: true,
+    isLength: {
+      options: {
+        min: 0,
+        max: 25,
+      },
+      errorMessage: "Máximo 50 caracteres",
+    },
+  },
+  primer_apellido: {
+    trim: true,
+    notEmpty: {
+      bail: true,
+      errorMessage: "Debes ingresar el primer apellido.",
+    },
+    escape: true,
+    isString: true,
+    isLength: {
+      options: {
+        min: 1,
+        max: 30,
+      },
+      errorMessage: "Máximo 30 caracteres",
+    },
+  },
+  primer_nombre: {
+    trim: true,
+    notEmpty: {
+      bail: true,
+      errorMessage: "Debes ingresar el primer nombre.",
+    },
+    escape: true,
+    isString: true,
+    isLength: {
+      options: {
+        min: 1,
+        max: 30,
+      },
+      errorMessage: "Máximo 30 caracteres",
+    },
+  },
+  salario: {
+    exists: {
+      bail: true,
+      errorMessage: "Es requerido el salario máximo",
+      options: { values: "falsy" },
+    },
+    isFloat: {
+      bail: true,
+      errorMessage: "El valor debe estar entre 100 y 100,000",
+      options: { min: 100, max: 100000 },
+    },
+    custom: {
+      bail: true,
+      options: validateSalarioCreate,
+    },
+  },
+  segundo_apellido: {
+    trim: true,
+    escape: true,
+    isString: true,
+    isLength: {
+      options: {
+        min: 0,
+        max: 30,
+      },
+      errorMessage: "Máximo 30 caracteres",
+    },
+  },
+  segundo_nombre: {
+    trim: true,
+    escape: true,
+    isString: true,
+    isLength: {
+      options: {
+        min: 0,
+        max: 30,
+      },
+      errorMessage: "Máximo 30 caracteres",
+    },
+  },
+};
+export default updateEmpleadoSchema;

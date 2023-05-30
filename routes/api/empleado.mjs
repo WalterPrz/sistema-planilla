@@ -8,5 +8,6 @@ const router = Router();
 router.post('/',[validateSchema(EmpleadoCreateSchema)],Call(EmpleadoController.store))
 router.put('/:id_empleado',[validateSchema(EmpleadoUdpateSchema)],Call(EmpleadoController.update))
 router.get('/',Call(EmpleadoController.index))
+router.put('/down/:id_empleado',Call(EmpleadoController.downEmpleado))
 
 export default router;
