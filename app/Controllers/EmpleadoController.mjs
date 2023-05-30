@@ -62,6 +62,7 @@ export default class CentroCostoController {
           barrio_colonia_residencial,
           pasaje_senda,
           calle_avenida,
+          fecha_inicio: new Date(),
         },
         { transaction: t }
       );
@@ -150,16 +151,16 @@ export default class CentroCostoController {
         };
       });
       const infoDependencia = await Dependencia.findOne({
-        include:[
-            {
-                model: TipoDependencia
-            }
+        include: [
+          {
+            model: TipoDependencia,
+          },
         ],
-        where:{
-            id_dependencia:  item.PuestoTrabajoDependencium.id_dependencia
-        }
+        where: {
+          id_dependencia: item.PuestoTrabajoDependencium.id_dependencia,
+        },
       });
-      const nombre_dependencia = `${infoDependencia.TipoDependencium.nombre_tipo_dependencia} ${ infoDependencia.nombre_dependencia}`
+      const nombre_dependencia = `${infoDependencia.TipoDependencium.nombre_tipo_dependencia} ${infoDependencia.nombre_dependencia}`;
       empleadosLimpios.push({
         id_empleado: item.id_empleado,
         id_genero: item.id_genero,
@@ -192,9 +193,39 @@ export default class CentroCostoController {
         nombre_estado_civil: item.EstadoCivil.nombre_estado_civil,
         nombre_municipio: item.Municipio.nombre_municipio,
         nombre_profesion: item.Profesion.nombre_profesion,
+        fecha_inicio: item.fecha_inicio,
+        fecha_fin: item.fecha_fin,
         documentos,
       });
     }
     return res.status(HttpCode.HTTP_OK).json(empleadosLimpios);
+  }
+  static async update(req, res) {
+    const connection = DB.connection();
+    const t = await connection.transaction();
+    try {
+      const {
+        id_puesto_trabajo_dependencia,
+        id_genero,
+        id_estado_civil,
+        id_municipio,
+        id_profesion,
+        array_documentos,
+        apellido_casada,
+        barrio_colonia_residencial,
+        calle_avenida,
+        fecha_de_nacimiento,
+        id_empleado_jefe,
+        numero_casa_apto,
+        pasaje_senda,
+        primer_apellido,
+        primer_nombre,
+        salario,
+        segundo_apellido,
+        segundo_nombre,
+      } = req.body;
+    } catch (e) {
+      throw e;
+    }
   }
 }
