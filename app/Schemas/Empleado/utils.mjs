@@ -13,21 +13,41 @@ import {
   DocumentoEmpleado,
 } from "../../../app/models/index.mjs";
 import Sequelize, { Op } from "sequelize";
-const verifyPlazas = async (id_puesto_trabajo_dependencia) => {
-  const plazasDisponibles = await PuestoTrabajoDependencia.findOne({
-    where: {
-      id_puesto_trabajo_dependencia,
-    },
-  });
-  const plazasOcupadas = await Empleado.findAll({
-    where: {
-      id_puesto_trabajo_dependencia,
-    },
-  });
-  if (plazasDisponibles.plazas == plazasOcupadas.length) {
-    throw new Error("Ya no hay plazas disponibles para este puesto.");
-  } else {
-    return true;
+const verifyPlazas = async (id_puesto_trabajo_dependencia, req, isUpdate = false) => {
+  if(isUpdate){
+    const plazasDisponibles = await PuestoTrabajoDependencia.findOne({
+      where: {
+        id_puesto_trabajo_dependencia,
+
+      },
+    });
+    const plazasOcupadas = await Empleado.findAll({
+      where: {
+        id_puesto_trabajo_dependencia,
+        id_empleado: {[Op.ne]: req.params.id_empleado}
+      },
+    });
+    if (plazasDisponibles.plazas == plazasOcupadas.length) {
+      throw new Error("Ya no hay plazas disponibles para este puesto.");
+    } else {
+      return true;
+    }
+  }else{
+    const plazasDisponibles = await PuestoTrabajoDependencia.findOne({
+      where: {
+        id_puesto_trabajo_dependencia,
+      },
+    });
+    const plazasOcupadas = await Empleado.findAll({
+      where: {
+        id_puesto_trabajo_dependencia,
+      },
+    });
+    if (plazasDisponibles.plazas == plazasOcupadas.length) {
+      throw new Error("Ya no hay plazas disponibles para este puesto.");
+    } else {
+      return true;
+    }
   }
 };
 const verifyDecimals = (value) => {
@@ -140,10 +160,51 @@ const validateArrayDocumentos = async (value, { req }) => {
     throw e;
   }
 };
+const validateIdPuestoTrabajoDependenciaUpdate = async (value, { req }) => {
+  try {
+    await verifyDataExist(
+      value,
+      req,
+      "id_puesto_trabajo_dependencia",
+      PuestoTrabajoDependencia
+    );
+    await verifyPlazas(value, req, true);
+  } catch (e) {
+    throw e;
+  }
+};
+const validateArrayDocumentosUpdate = async (value, { req }) => {
+  try {
+    for (const nuevoDoc of value) {
+      const buscado = await DocumentoEmpleado.findOne({
+        include: [
+          {
+            required: true,
+            model: Documento,
+          },
+        ],
+        where: {
+          numero_documento_empleado: nuevoDoc.numero_documento_empleado,
+          id_documento: nuevoDoc.id_documento,
+          id_empleado: {[Op.ne]:req.params.id_empleado}
+        },
+      });
+      if (!!buscado) {
+        throw new Error(
+          `Ya existe un documento registrado con el número: ${nuevoDoc.numero_documento_empleado}`
+        );
+      }
+    }
+  } catch (e) {
+    throw e;
+  }
+};
 export {
   validateIdPuestoTrabajoDependenciaCreate,
+  validateIdPuestoTrabajoDependenciaUpdate,
   verifyIsOld,
   validateSalarioCreate,
   validateArrayDocumentos,
   setOnlyByTipo,
+  validateArrayDocumentosUpdate,
 };

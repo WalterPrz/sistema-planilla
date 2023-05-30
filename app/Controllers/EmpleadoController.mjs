@@ -18,7 +18,7 @@ import Sequelize, { Op } from "sequelize";
 import DB from "../DB/connection.mjs";
 import BadRequestException from "../../handlers/BadRequestException.mjs";
 
-export default class CentroCostoController {
+export default class EmpleadoController {
   static async store(req, res) {
     const connection = DB.connection();
     const t = await connection.transaction();
@@ -76,6 +76,7 @@ export default class CentroCostoController {
           { transaction: t }
         );
       }
+
       await t.commit();
       return res
         .status(HttpCode.HTTP_CREATED)
@@ -99,9 +100,6 @@ export default class CentroCostoController {
             {
               required: true,
               model: Dependencia,
-              include: {
-                model: TipoDependencia,
-              },
             },
           ],
         },
@@ -160,6 +158,9 @@ export default class CentroCostoController {
           id_dependencia: item.PuestoTrabajoDependencium.id_dependencia,
         },
       });
+      const infoEmpleado = await EmpleadoController.infoJefe(
+        item.id_empleado_jefe
+      );
       const nombre_dependencia = `${infoDependencia.TipoDependencium.nombre_tipo_dependencia} ${infoDependencia.nombre_dependencia}`;
       empleadosLimpios.push({
         id_empleado: item.id_empleado,
@@ -176,7 +177,7 @@ export default class CentroCostoController {
         fecha_de_nacimiento: item.fecha_de_nacimiento,
         numero_casa_apto: item.numero_casa_apto,
         salario: item.salario,
-        id_empleado_jefe: item.id_empleado_jefe,
+        id_empleado_jefe: infoEmpleado,
         barrio_colonia_residencial: item.barrio_colonia_residencial,
         pasaje_senda: item.pasaje_senda,
         calle_avenida: item.calle_avenida,
@@ -223,9 +224,123 @@ export default class CentroCostoController {
         salario,
         segundo_apellido,
         segundo_nombre,
+        documentos_change,
       } = req.body;
+      const { id_empleado } = req.params;
+      await Empleado.update(
+        {
+          id_genero,
+          id_profesion,
+          id_estado_civil,
+          id_municipio,
+          id_puesto_trabajo_dependencia,
+          primer_nombre,
+          segundo_nombre,
+          primer_apellido,
+          segundo_apellido,
+          apellido_casada,
+          fecha_de_nacimiento,
+          numero_casa_apto,
+          salario,
+          id_empleado_jefe,
+          barrio_colonia_residencial,
+          pasaje_senda,
+          calle_avenida,
+          fecha_inicio: new Date(),
+        },
+        {
+          where: {
+            id_empleado,
+          },
+          transaction: t,
+        }
+      );
+      if (!!documentos_change) {
+        await DocumentoEmpleado.destroy({
+          where: {
+            id_empleado,
+          },
+          transaction: t,
+        });
+        for (const item of array_documentos) {
+          await DocumentoEmpleado.create(
+            {
+              id_documento: item.id_documento,
+              id_empleado,
+              numero_documento_empleado: item.numero_documento_empleado,
+            },
+            { transaction: t }
+          );
+        }
+      }
+      await t.commit();
+      return res
+        .status(HttpCode.HTTP_OK)
+        .json({ message: "Ha sido actualizado con éxito" });
     } catch (e) {
+      await t.rollback();
       throw e;
     }
+  }
+  static async infoJefe(id_empleado) {
+    if (id_empleado == null) {
+      return null;
+    }
+    const empleadosNoLimpios = await Empleado.findOne({
+      include: [
+        {
+          required: true,
+          model: PuestoTrabajoDependencia,
+          include: [
+            {
+              required: true,
+              model: PuestoTrabajo,
+            },
+            {
+              required: true,
+              model: Dependencia,
+            },
+          ],
+        },
+      ],
+      where: {
+        id_empleado,
+      },
+    });
+    if (empleadosNoLimpios == null) {
+      return null;
+    }
+    const infoDependencia = await Dependencia.findOne({
+      include: [
+        {
+          model: TipoDependencia,
+        },
+      ],
+      where: {
+        id_dependencia:
+          empleadosNoLimpios.PuestoTrabajoDependencium.id_dependencia,
+      },
+    });
+    const nombre_dependencia = `${infoDependencia.TipoDependencium.nombre_tipo_dependencia} ${infoDependencia.nombre_dependencia}`;
+    const empleadoLimpio = {
+      id_empleado: empleadosNoLimpios.id_empleado,
+      id_puesto_trabajo_dependencia:
+        empleadosNoLimpios.id_puesto_trabajo_dependencia,
+      primer_nombre: empleadosNoLimpios.primer_nombre,
+      segundo_nombre: empleadosNoLimpios.segundo_nombre,
+      primer_apellido: empleadosNoLimpios.primer_apellido,
+      segundo_apellido: empleadosNoLimpios.segundo_apellido,
+      apellido_casada: empleadosNoLimpios.apellido_casada,
+      fecha_de_nacimiento: empleadosNoLimpios.fecha_de_nacimiento,
+      fecha_inicio: empleadosNoLimpios.fecha_inicio,
+      fecha_fin: empleadosNoLimpios.fecha_fin,
+      id_puesto_trabajo:
+        empleadosNoLimpios.PuestoTrabajoDependencium.id_puesto_trabajo,
+      nombre_puesto_trabajo:
+        empleadosNoLimpios.PuestoTrabajoDependencium.PuestoTrabajo
+          .nombre_puesto_trabajo,
+      nombre_dependencia,
+    };
+    return empleadoLimpio;
   }
 }
