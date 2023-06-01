@@ -5,27 +5,9 @@ import bcrypt from "bcryptjs";
 import Auth from "../utils/Auth.mjs";
 import BadRequestException from "../../handlers/BadRequestException.mjs";
 import moment from "moment";
+import DB from "../DB/connection.mjs";
 export default class AuthController {
-  static async register(req, res) {
-    try {
-      const { correo_institucional, clave, id_rol, id_empleado } = req.body;
-      const salt = await bcrypt.genSalt(10);
-      const contrasena = await bcrypt.hash(clave, salt);
-      const usuario = await Usuario.create({
-        correo_institucional,
-        contrasena,
-        id_rol,
-        id_empleado,
-        activo: true,
-      });
-      res.status(HttpCode.HTTP_CREATED).json({
-        usuario,
-        message: "Usuario creado con éxito.",
-      });
-    } catch (e) {
-      throw e;
-    }
-  }
+
   static async login(req, res) {
     try {
       const { correo_institucional, clave } = req.body;
@@ -37,6 +19,15 @@ export default class AuthController {
       if (!!usuario) {
         const coincideClave = await bcrypt.compare(clave, usuario?.contrasena);
         if (!coincideClave) {
+          let attemptsFailedBase = usuario.attempts_failed;
+          attemptsFailedBase++;
+          const data = {
+            attempts_failed: attemptsFailedBase,
+          };
+          if(attemptsFailedBase >=3){
+            data.activo = false;
+          }
+          await usuario.update(data);
           throw new BadRequestException("Credenciales no válidas");
         }
       } else {
@@ -53,8 +44,12 @@ export default class AuthController {
         },
         process.env.JWT_SECRET
       );
+      if(!usuario.activo){
+        throw new BadRequestException("El usuario esta desactivado.");
+      }
       Usuario.update(
         {
+          attempts_failed:0,
           ultima_conexion: moment().tz("America/El_Salvador").format(),
           token_valid_after: moment()
             .subtract(
@@ -64,7 +59,7 @@ export default class AuthController {
             .tz("America/El_Salvador")
             .format(),
         },
-        { where: { id_usuario: usuario.id_usuario } }
+        { where: { id_usuario: usuario.id_usuario }}
       );
       res.status(HttpCode.HTTP_OK).json({
         message: "Inicio de sesión correcto",
@@ -82,12 +77,14 @@ export default class AuthController {
         },
         { where: { id_usuario: req.usuario.id_usuario } }
       );
-      return res.status(HttpCode.HTTP_OK).send({message:'Se ha cerrado la sesión.'});
+      return res
+        .status(HttpCode.HTTP_OK)
+        .send({ message: "Se ha cerrado la sesión." });
     } catch (e) {
       throw e;
     }
   }
-  static async isTokenExpired(req, res){
-    return res.status(HttpCode.HTTP_OK).send({message:'El token es válido'});
+  static async isTokenExpired(req, res) {
+    return res.status(HttpCode.HTTP_OK).send({ message: "El token es válido" });
   }
 }

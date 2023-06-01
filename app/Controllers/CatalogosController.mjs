@@ -20,7 +20,6 @@ export default class CatalogoController {
         const {id_territorio}= req.query
         let filtro = {}
         if(!!id_territorio){
-            console.log("ENTRA ACA")
             filtro = {
                 id_territorio,
             }

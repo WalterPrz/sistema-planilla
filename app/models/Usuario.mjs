@@ -1,6 +1,6 @@
 import { Model, DataTypes } from "sequelize";
 import DB from "../DB/connection.mjs";
-import { Empleado, RefreshToken } from "./index.mjs";
+import { Empleado, RefreshToken, Rol } from "./index.mjs";
 class Usuario extends Model {
   static associate() {
     this.belongsTo(Empleado,{
@@ -8,6 +8,9 @@ class Usuario extends Model {
     })
     this.hasMany(RefreshToken,{
       foreignKey: 'id_usuario'
+    })
+    this.belongsTo(Rol,{
+      foreignKey:'id_rol'
     })
   }
 }
@@ -54,6 +57,11 @@ Usuario.init(
     token_valid_after: {
       type: DataTypes.DATE,
       allowNull: true,
+    },
+    attempts_failed: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      defaultValue:0
     },
   },
   {
