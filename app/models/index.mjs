@@ -20,6 +20,13 @@ import TipoPermiso from './TipoPermiso.mjs';
 import Rol from './Rol.mjs';
 import PermisoRol from './PermisoRol.mjs';
 import Documento from './Documento.mjs';
+import Planilla from './Planilla.mjs';
+import TipoBono from './TipoBono.mjs';
+import TipoDeduccion from './TipoDeduccion.mjs';
+import PlanillaEmpleado from './PlanillaEmpleado.mjs';
+import DeduccionEmpleado from './DeduccionEmpleado.mjs';
+import BonosPlanillaEmpleado from './BonosPlanillaEmpleado.mjs';
+import DeduccionPlanillaEmpleado from './DeduccionPlanillaEmpleado.mjs';
 EstructuraTerritorial.associate();
 Departamento.associate();
 Municipio.associate();
@@ -42,6 +49,13 @@ TipoPermiso.associate();
 Rol.associate();
 PermisoRol.associate();
 Documento.associate();
+Planilla.associate();
+TipoBono.associate();
+TipoDeduccion.associate();
+PlanillaEmpleado.associate;
+DeduccionEmpleado.associate;
+BonosPlanillaEmpleado.associate;
+DeduccionPlanillaEmpleado.associate;
 export {
     EstructuraTerritorial,
     Departamento,
@@ -65,4 +79,11 @@ export {
     Rol,
     PermisoRol,
     Documento,
+    Planilla,
+    TipoBono,
+    TipoDeduccion,
+    PlanillaEmpleado,
+    DeduccionEmpleado,
+    BonosPlanillaEmpleado,
+    DeduccionPlanillaEmpleado,
 }
