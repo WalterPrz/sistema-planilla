@@ -4,7 +4,7 @@ import { verifyDataExist, callValidateFunc } from '../utils.mjs'
 const customVerifyExist = callValidateFunc(verifyDataExist);
 
 const verifyIsFirst = async (value, { req }) => {
-    const all = await Dependencia.findAll();
+    const all = await Dependencia.findAll({where:{id_dependencia_padre:null}});
     if (all.length > 0 && !!value) {
         await verifyDataExist(value, req, 'id_dependencia', Dependencia)
     } else if (all.length > 0 && !(!!value)) {
