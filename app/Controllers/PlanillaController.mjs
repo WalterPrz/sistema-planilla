@@ -112,7 +112,7 @@ export default class PlanillaController {
                 .format("YYYY-MM-DD");
             const mes = moment(anio_mes, "YYYY-MM").month() + 1;
             const anio = moment(anio_mes, "YYYY-MM").year();
-            const empleados = await Empleado.findAll({
+            const empleadosX = await Empleado.findAll({
                 attributes: ["id_empleado", "salario", "fecha_fin", "fecha_inicio"],
                 include: [
                     {
@@ -144,6 +144,11 @@ export default class PlanillaController {
                     ],
                 },
             });
+            const empleados = empleadosX.map((x)=>{
+                //calculo si el empleado entro a fin de mes, si ya no trabaja y calculo su salario en base a los dias trabajados.
+                x.salario = PlanillaController.getSalary(x, primeraFechaMes, ultimaFechaMes)
+                return x
+            })
             const tipos_Bonos = await TipoBono.findAll();
             const tipos_deducciones = await TipoDeduccion.findAll({
                 include: [
@@ -180,8 +185,6 @@ export default class PlanillaController {
                 const infoEmpleado = empleados.find(
                     (x) => x.id_empleado == p_empleado.id_empleado
                 );
-                //calculo si el empleado entro a fin de mes, si ya no trabaja y calculo su salario en base a los dias trabajados.
-                infoEmpleado.salario = PlanillaController.getSalary(infoEmpleado, primeraFechaMes, ultimaFechaMes)
                 //1ro. recorro los que son de ley
                 for (const deduccion_ley of deduccionesLey) {
                     if (deduccion_ley.id_deduccion != 3) {
