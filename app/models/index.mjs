@@ -27,6 +27,7 @@ import PlanillaEmpleado from './PlanillaEmpleado.mjs';
 import DeduccionEmpleado from './DeduccionEmpleado.mjs';
 import BonosPlanillaEmpleado from './BonosPlanillaEmpleado.mjs';
 import DeduccionPlanillaEmpleado from './DeduccionPlanillaEmpleado.mjs';
+import CondicionesDeduccion from './CondicionesDeduccion.mjs';
 EstructuraTerritorial.associate();
 Departamento.associate();
 Municipio.associate();
@@ -52,10 +53,11 @@ Documento.associate();
 Planilla.associate();
 TipoBono.associate();
 TipoDeduccion.associate();
-PlanillaEmpleado.associate;
-DeduccionEmpleado.associate;
-BonosPlanillaEmpleado.associate;
-DeduccionPlanillaEmpleado.associate;
+CondicionesDeduccion.associate();
+PlanillaEmpleado.associate();
+DeduccionEmpleado.associate();
+BonosPlanillaEmpleado.associate();
+DeduccionPlanillaEmpleado.associate();
 export {
     EstructuraTerritorial,
     Departamento,
@@ -82,6 +84,7 @@ export {
     Planilla,
     TipoBono,
     TipoDeduccion,
+    CondicionesDeduccion,
     PlanillaEmpleado,
     DeduccionEmpleado,
     BonosPlanillaEmpleado,

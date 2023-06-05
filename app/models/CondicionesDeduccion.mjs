@@ -34,7 +34,7 @@ CondicionesDeduccion.init(
     },
     hasta: {
       type: DataTypes.DECIMAL,
-      allowNull: false,
+      allowNull: true,
     },
     porcentaje: {
       type: DataTypes.DECIMAL,

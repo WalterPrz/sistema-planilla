@@ -26,7 +26,7 @@ TipoBono.init(
     },
     valor: {
       type: DataTypes.REAL,
-      allowNull: false,
+      allowNull: true,
     },
   },
   {

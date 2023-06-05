@@ -24,7 +24,7 @@ Planilla.init(
       type: DataTypes.SMALLINT,
       allowNull: false,
     },
-    fecha_elabracion: {
+    fecha_elaboracion: {
       type: DataTypes.DATEONLY,
       allowNull: false,
     },

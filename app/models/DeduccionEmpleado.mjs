@@ -39,6 +39,10 @@ DeduccionEmpleado.init(
       type: DataTypes.STRING,
       allowNull: false,
     },
+    monto: {
+      type: DataTypes.DECIMAL,
+      allowNull: false,
+    },
     activo: {
       type: DataTypes.BOOLEAN,
       allowNull: false,
