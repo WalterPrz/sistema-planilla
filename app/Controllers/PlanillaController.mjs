@@ -20,6 +20,7 @@ import HttpCode from "../../configs/HttpCodes.mjs";
 import Sequelize, { Op } from "sequelize";
 import DB from "../DB/connection.mjs";
 import moment from "moment";
+import BadRequestException from "../../handlers/BadRequestException.mjs";
 
 export default class PlanillaController {
     static calcularPorcentaje(valor, porcentaje) {
@@ -70,32 +71,39 @@ export default class PlanillaController {
         }
     }
     static getSalary(infoEmpleado, inicio, fin) {
-        const inicioEmpleado = moment(infoEmpleado.fecha_inicio, "YYYY-MM-DD").tz("America/El_Salvador");
-        const inicioMes = moment(inicio, "YYYY-MM-DD").startOf('day');
-        const finMes = moment(fin, "YYYY-MM-DD").endOf('day');
-        const daysMonth = finMes.diff(inicioMes, 'days') + 1
-        const salarioByDay = parseFloat(infoEmpleado.salario) / daysMonth
-        let salario = 0
+        const inicioEmpleado = moment(infoEmpleado.fecha_inicio, "YYYY-MM-DD").tz(
+            "America/El_Salvador"
+        );
+        const inicioMes = moment(inicio, "YYYY-MM-DD").startOf("day");
+        const finMes = moment(fin, "YYYY-MM-DD").endOf("day");
+        const daysMonth = finMes.diff(inicioMes, "days") + 1;
+        const salarioByDay = parseFloat(infoEmpleado.salario) / daysMonth;
+        let salario = 0;
         if (inicioEmpleado.isBefore(inicioMes)) {
             if (!!infoEmpleado.fecha_fin) {
-                const finEmpleado = moment(infoEmpleado.fecha_fin, "YYYY-MM-DD").tz("America/El_Salvador")
-                const totalDiasTrabajados = finEmpleado.diff(inicioMes, 'days') +1
-                salario = parseFloat(totalDiasTrabajados * salarioByDay)
+                const finEmpleado = moment(infoEmpleado.fecha_fin, "YYYY-MM-DD").tz(
+                    "America/El_Salvador"
+                );
+                const totalDiasTrabajados = finEmpleado.diff(inicioMes, "days") + 1;
+                salario = parseFloat(totalDiasTrabajados * salarioByDay);
             } else {
-                const totalDiasTrabajados = finMes.diff(inicioMes, 'days') +1
-                salario = parseFloat(totalDiasTrabajados * salarioByDay)
+                const totalDiasTrabajados = finMes.diff(inicioMes, "days") + 1;
+                salario = parseFloat(totalDiasTrabajados * salarioByDay);
             }
         } else {
             if (!!infoEmpleado.fecha_fin) {
-                const finEmpleado = moment(infoEmpleado.fecha_fin, "YYYY-MM-DD").tz("America/El_Salvador")
-                const totalDiasTrabajados = finEmpleado.diff(inicioEmpleado, 'days') +1
-                salario = parseFloat(totalDiasTrabajados * salarioByDay)
+                const finEmpleado = moment(infoEmpleado.fecha_fin, "YYYY-MM-DD").tz(
+                    "America/El_Salvador"
+                );
+                const totalDiasTrabajados =
+                    finEmpleado.diff(inicioEmpleado, "days") + 1;
+                salario = parseFloat(totalDiasTrabajados * salarioByDay);
             } else {
-                const totalDiasTrabajados = finMes.diff(inicioEmpleado, 'days') +1
-                salario = parseFloat(totalDiasTrabajados * salarioByDay)
+                const totalDiasTrabajados = finMes.diff(inicioEmpleado, "days") + 1;
+                salario = parseFloat(totalDiasTrabajados * salarioByDay);
             }
         }
-        return salario.toFixed(2)
+        return salario.toFixed(2);
     }
     static async store(req, res) {
         const connection = DB.connection();
@@ -144,11 +152,15 @@ export default class PlanillaController {
                     ],
                 },
             });
-            const empleados = empleadosX.map((x)=>{
+            const empleados = empleadosX.map((x) => {
                 //calculo si el empleado entro a fin de mes, si ya no trabaja y calculo su salario en base a los dias trabajados.
-                x.salario = PlanillaController.getSalary(x, primeraFechaMes, ultimaFechaMes)
-                return x
-            })
+                x.salario = PlanillaController.getSalary(
+                    x,
+                    primeraFechaMes,
+                    ultimaFechaMes
+                );
+                return x;
+            });
             const tipos_Bonos = await TipoBono.findAll();
             const tipos_deducciones = await TipoDeduccion.findAll({
                 include: [
@@ -415,6 +427,9 @@ export default class PlanillaController {
                 id_planilla_empleado,
             },
         });
+        if (!!data == false) {
+            throw new BadRequestException("No se encontro datos");
+        }
         const infoDependencia = await Dependencia.findOne({
             include: [
                 {
@@ -437,7 +452,8 @@ export default class PlanillaController {
             id_profesion: data.Empleado.id_profesion,
             id_estado_civil: data.Empleado.id_estado_civil,
             id_municipio: data.Empleado.id_municipio,
-            id_puesto_trabajo_dependencia: data.Empleado.id_puesto_trabajo_dependencia,
+            id_puesto_trabajo_dependencia:
+                data.Empleado.id_puesto_trabajo_dependencia,
             primer_nombre: data.Empleado.primer_nombre,
             segundo_nombre: data.Empleado.segundo_nombre,
             primer_apellido: data.Empleado.primer_apellido,
@@ -455,14 +471,82 @@ export default class PlanillaController {
             fecha_inicio: data.Empleado.fecha_inicio,
             fecha_fin: data.Empleado.fecha_fin,
             id_dependencia: data.Empleado.PuestoTrabajoDependencium.id_dependencia,
-            nombre_puesto_trabajo: data.Empleado.PuestoTrabajoDependencium.PuestoTrabajo.nombre_puesto_trabajo,
+            nombre_puesto_trabajo:
+                data.Empleado.PuestoTrabajoDependencium.PuestoTrabajo
+                    .nombre_puesto_trabajo,
             jefatura: data.Empleado.PuestoTrabajoDependencium.jefatura,
             nombre_dependencia,
             documento_identidad: {
                 nombre: data.Empleado.DocumentoEmpleados[0].Documento.nombre_documento,
-                numero: data.Empleado.DocumentoEmpleados[0].numero_documento_empleado
-            }
+                numero: data.Empleado.DocumentoEmpleados[0].numero_documento_empleado,
+            },
+            deduccionesPlanilla: data.DeduccionPlanillaEmpleados,
+            bonos: data.BonosPlanillaEmpleados,
         };
         res.status(HttpCode.HTTP_OK).json(data_clear);
+    }
+    static async getMyPlanillas(req, res) {
+        const data = await PlanillaEmpleado.findAll({
+            include: [
+                {
+                    required: true,
+                    model: Planilla,
+                    where: {
+                        procesada: false,
+                    },
+                },
+                {
+                    model: DeduccionPlanillaEmpleado,
+                    include: {
+                        attributes: ["nombre_descuento", "es_ley"],
+                        required: true,
+                        model: TipoDeduccion,
+                    },
+                },
+                {
+                    model: BonosPlanillaEmpleado,
+                    include: {
+                        attributes: ["nombre"],
+                        required: true,
+                        model: TipoBono,
+                    },
+                },
+            ],
+            where: {
+                id_empleado: req.usuario.id_empleado,
+            },
+        });
+        const datos_clear = data.map((x) => {
+            const deducciones = x.DeduccionPlanillaEmpleados.map((y) => {
+                return {
+                    id_deduccion_planilla_empleado: y.id_deduccion_planilla_empleado,
+                    tipo_deduccion: y.TipoDeduccion.nombre_descuento,
+                    es_ley: y.TipoDeduccion.es_ley,
+                    monto: y.monto,
+                    descripcion_concepto: y.descripcion_concepto
+                }
+            })
+            const bonos = x.BonosPlanillaEmpleados.map((y)=>{
+                return {
+                    id_bonos_planilla_empleado: y.id_bonos_planilla_empleado,
+                    monto: y.monto,
+                    descripcion_concepto: y.descripcion_concepto,
+                    tipo_bono: y.TipoBono.nombre,
+                }
+            })
+            return {
+                id_planilla_empleado: x.id_planilla_empleado,
+                id_planilla: x.id_planilla,
+                id_empleado: x.id_empleado,
+                total_neto: x.total_neto,
+                id_planilla: x.Planilla.id_planilla,
+                mes_planilla: x.Planilla.mes_planilla,
+                anio_planilla: x.Planilla.anio_planilla,
+                fecha_elaboracion: x.Planilla.fecha_elaboracion,
+                deducciones,
+                bonos,
+            };
+        });
+        res.status(HttpCode.HTTP_OK).json(datos_clear);
     }
 }
