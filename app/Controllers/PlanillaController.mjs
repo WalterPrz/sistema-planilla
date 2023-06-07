@@ -17,7 +17,7 @@ import {
     TipoDependencia,
 } from "../models/index.mjs";
 import HttpCode from "../../configs/HttpCodes.mjs";
-import Sequelize, { Op } from "sequelize";
+import Sequelize, { Op, where } from "sequelize";
 import DB from "../DB/connection.mjs";
 import moment from "moment";
 import BadRequestException from "../../handlers/BadRequestException.mjs";
@@ -526,7 +526,7 @@ export default class PlanillaController {
                     descripcion_concepto: y.descripcion_concepto
                 }
             })
-            const bonos = x.BonosPlanillaEmpleados.map((y)=>{
+            const bonos = x.BonosPlanillaEmpleados.map((y) => {
                 return {
                     id_bonos_planilla_empleado: y.id_bonos_planilla_empleado,
                     monto: y.monto,
@@ -548,5 +548,12 @@ export default class PlanillaController {
             };
         });
         res.status(HttpCode.HTTP_OK).json(datos_clear);
+    }
+    static async procesarPlanilla(req, res) {
+        const { id_planilla } = req.params 
+            await Planilla.update({
+                procesada: true
+            }, { where: { id_planilla } })
+        res.status(HttpCode.HTTP_OK).json({message: "Planilla procesada con éxito"});
     }
 }
