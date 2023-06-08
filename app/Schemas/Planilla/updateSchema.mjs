@@ -3,7 +3,7 @@ import Sequelize, { Op } from "sequelize";
 import { verifyDataExist, callValidateFunc } from '../utils.mjs'
 import moment from "moment";
 const customVerifyExist = callValidateFunc(verifyDataExist);
-const createCentroCostoSchema = {
+const updatePlanillaSchema = {
     id_planilla: {
         isInt: {
             bail: true,
@@ -15,4 +15,4 @@ const createCentroCostoSchema = {
         },
     }
 };
-export default createCentroCostoSchema;
+export default updatePlanillaSchema;
