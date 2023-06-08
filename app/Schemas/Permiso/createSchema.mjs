@@ -10,7 +10,7 @@ const verifyUnique = async (value) => {
     });
 
     if (exist) {
-        //throw new Error("El nombre ya existe");
+        throw new Error("El nombre ya existe");
     } else {
         return true;
     }

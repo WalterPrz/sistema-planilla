@@ -61,7 +61,7 @@ const verifyArrayBonos = async (value, { req }) => {
         throw e
     }
 }
-const createCentroCostoSchema = {
+const createPlanillaSchema = {
     anio_mes: {
         exists: {
             bail: true,
@@ -91,4 +91,4 @@ const createCentroCostoSchema = {
         },
     },
 };
-export default createCentroCostoSchema;
+export default createPlanillaSchema;
