@@ -5,8 +5,9 @@ import DeduccionPlanillaEmpleadoController from "../../app/Controllers/Deduccion
 /* import createDeduccionPlanillaEmpleadoSchema from "../../app/Schemas/DeduccionPlanillaEmpleado/createSchema.mjs";
 import updateDeduccionPlanillaEmpleadoSchema from "../../app/Schemas/DeduccionPlanillaEmpleado/updateSchema.mjs";
 import deleteDeduccionPlanillaEmpleadoSchema from "../../app/Schemas/DeduccionPlanillaEmpleado/deleteSchema.mjs"; */
+import hasRole from "../../app/middlewares/hasRole.mjs"
 const router = Router();
-router.post('/', [], Call(DeduccionPlanillaEmpleadoController.store))
-router.put('/:id_deduccion_planilla_empleado', [], Call(DeduccionPlanillaEmpleadoController.update))
-router.delete('/:id_deduccion_planilla_empleado', [], Call(DeduccionPlanillaEmpleadoController.delete))
+router.post('/', [hasRole('CREATE_DEDUCCION_PLANILLA')], Call(DeduccionPlanillaEmpleadoController.store))
+router.put('/:id_deduccion_planilla_empleado', [hasRole('UPDATE_DEDUCCION_PLANILLA')], Call(DeduccionPlanillaEmpleadoController.update))
+router.delete('/:id_deduccion_planilla_empleado', [hasRole('DESTROY_DEDUCCION_PLANILLA')], Call(DeduccionPlanillaEmpleadoController.delete))
 export default router;
