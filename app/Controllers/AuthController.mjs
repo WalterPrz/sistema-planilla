@@ -1,4 +1,4 @@
-import { Usuario } from "../models/index.mjs";
+import { Permiso, PermisoRol, Usuario } from "../models/index.mjs";
 import HttpCode from "../../configs/HttpCodes.mjs";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
@@ -16,6 +16,7 @@ export default class AuthController {
           correo_institucional,
         },
       });
+
       if (!!usuario) {
         const coincideClave = await bcrypt.compare(clave, usuario?.contrasena);
         if (!coincideClave) {
@@ -33,6 +34,22 @@ export default class AuthController {
       } else {
         throw new BadRequestException("Credenciales no válidas");
       }
+      const permisos =  await PermisoRol.findAll(
+        {
+          include:{
+            model: Permiso,
+            where:{
+              id_tipo_permiso:2
+            }
+          }
+        },
+        {
+          where:{
+            id_rol: usuario.id_rol
+          }
+        }
+      )
+      const nuevosPermisos = permisos.map((x)=>x?.Permiso?.nombre_permiso)
       const refreshToken = await Auth.refresh_token(usuario);
       const token = await Auth.createToken(
         {
@@ -41,6 +58,7 @@ export default class AuthController {
           id_rol: usuario.id_rol,
           correo_institucional: usuario.correo_institucional,
           refreshToken,
+          menu_permisos: nuevosPermisos,
         },
         process.env.JWT_SECRET
       );
