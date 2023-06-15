@@ -12,6 +12,7 @@ import {
   PuestoTrabajo,
   Dependencia,
   TipoDependencia,
+  DeduccionEmpleado,
 } from "../models/index.mjs";
 import HttpCode from "../../configs/HttpCodes.mjs";
 import Sequelize, { Op } from "sequelize";
@@ -348,7 +349,7 @@ export default class EmpleadoController {
       const { id_empleado } = req.params;
       await Empleado.update({
         fecha_fin: new Date()
-      },{where:{id_empleado}})
+      }, { where: { id_empleado } })
       return res
         .status(HttpCode.HTTP_OK)
         .json({ message: "Ha sido creado con éxito", empleado });

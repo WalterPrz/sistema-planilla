@@ -12,6 +12,13 @@ import catalogoRouter from './api/catalogo.mjs'
 import empleadoRouter from './api/empleado.mjs'
 import usuarioRouter from './api/usuario.mjs'
 import planillaRouter from './api/planilla.mjs'
+import tipoBonoRouter from './api/tipoBono.mjs'
+import tipoDeduccionRouter from './api/tipoDeduccion.mjs'
+import empleadosRouter from './api/empleadosRouter.mjs';
+import condicionesDeduccionRouter from './api/condicionesDeduccion.mjs'
+import deduccionPlanillaEmpleadoRouter from './api/deduccionPlanillaEmpleado.mjs'
+import bonosPlanillaEmpleadoRouter from './api/bonosPlanillaEmpleado.mjs'
+import deduccionEmpleadodoRouter from './api/deduccionEmpleado.mjs'
 import {validateToken} from "../app/middlewares/AuthMiddlewares.mjs";
 import { validationResult } from "express-validator";
 
@@ -29,6 +36,12 @@ router.use('/centro_costo',[validateToken], centroCostoRouter)
 router.use('/catalogo', [validateToken], catalogoRouter)
 router.use('/empleado', [validateToken],empleadoRouter)
 router.use('/usuario',[validateToken], usuarioRouter)
-router.use('/planilla', planillaRouter)
-
+router.use('/planilla',  [validateToken],planillaRouter)
+router.use('/tipo_bono',  [validateToken],tipoBonoRouter)
+router.use('/tipo_deduccion', [validateToken], tipoDeduccionRouter)
+router.use('/condiciones_deduccion', [validateToken], condicionesDeduccionRouter)
+router.use('/empleados', [validateToken], empleadosRouter);
+router.use('/deduccion_planilla',  [validateToken],deduccionPlanillaEmpleadoRouter);
+router.use('/bono_planilla', [validateToken], bonosPlanillaEmpleadoRouter);
+router.use('/deduccion_empleado', [validateToken], deduccionEmpleadodoRouter);
 export default router;
